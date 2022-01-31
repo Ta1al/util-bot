@@ -22,6 +22,7 @@ module.exports = {
       }
     ],
     defaultPermissions: false,
+    default_permissions: false,
     permissions: {
       id: process.env.OWNER,
       type: 'USER',

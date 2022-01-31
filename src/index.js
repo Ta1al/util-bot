@@ -16,7 +16,5 @@ client.on("interactionCreate", (int) => {
     int.reply("Command not found.");
   }
 });
-process.on("dbUpdate", doc => {
-  console.log(doc)
-})
+
 client.login(TOKEN);

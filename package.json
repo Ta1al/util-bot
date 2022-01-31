@@ -4,7 +4,7 @@
   "description": "Discord bot for Utilities",
   "main": "src/index.js",
   "scripts": {
-    "test": "node ."
+    "test": "node dotenv/config ."
   },
   "repository": {
     "type": "git",

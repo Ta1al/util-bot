@@ -1,18 +1,22 @@
-const { Client, Intents } = require('discord.js');
-const { TOKEN } = process.env;
+const { Client, Intents } = require("discord.js"),
+  { TOKEN, MONGO_URI } = process.env,
+  client = new Client({ intents: [Intents.FLAGS.GUILDS] }),
+  { connect } = require('mongoose');
 
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
-
-client.once('ready', () => {
-	console.log('Ready!');
+client.once("ready", () => {
+  connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+  require('./commands/reminder.js').init(client);
+  console.log("Ready!");
 });
 
-client.on("interactionCreate", int => {
+client.on("interactionCreate", (int) => {
   try {
     require(`./commands/${int.commandName}.js`).run(client, int);
   } catch (e) {
-    int.reply('Command not found.');
+    int.reply("Command not found.");
   }
+});
+process.on("dbUpdate", doc => {
+  console.log(doc)
 })
-
 client.login(TOKEN);

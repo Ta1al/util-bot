@@ -108,7 +108,7 @@ module.exports = {
           guildID: interaction.guildId
         });
 
-        if (reminders.length === 0) return interaction.reply("You have no reminders.");
+        if (reminders.length === 0) return interaction.editReply("You have no reminders.");
 
         interaction.editReply({
           embeds: [

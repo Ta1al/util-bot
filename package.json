@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "engines": {
     "node": "16.x"
-  }
+  },
   "scripts": {
     "start": "node -r dotenv/config ."
   },

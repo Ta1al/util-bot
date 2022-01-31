@@ -1,0 +1,27 @@
+{
+  "name": "util-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for Utilities",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ta1al/util-bot.git"
+  },
+  "keywords": [
+    "discord"
+  ],
+  "author": "Ta1al",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ta1al/util-bot/issues"
+  },
+  "homepage": "https://github.com/Ta1al/util-bot#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "dotenv": "^15.0.0",
+    "mongoose": "^6.1.8"
+  }
+}

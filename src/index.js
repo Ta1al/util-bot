@@ -10,6 +10,7 @@ client.once("ready", () => {
 });
 
 client.on("interactionCreate", (int) => {
+  if (int.type === 'MESSAGE_COMPONENT') return;
   try {
     require(`./commands/${int.commandName}.js`).run(client, int);
   } catch (e) {

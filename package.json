@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Discord bot for Utilities",
   "main": "src/index.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "start": "node -r dotenv/config ."
   },

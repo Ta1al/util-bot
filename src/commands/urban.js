@@ -31,8 +31,13 @@ module.exports = {
           word
         )}`,
         { headers }
-      ),
-      { list } = await res.json();
+      ).catch((e) => {
+        console.error(e);
+        return interaction.editReply("Error fetching definition.");
+      });
+    if (!res || !res.json) return;
+
+    const { list } = await res.json();
 
     if (!list.length) return interaction.editReply("No results found.");
 

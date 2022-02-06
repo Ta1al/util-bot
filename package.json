@@ -25,10 +25,11 @@
   "dependencies": {
     "discord.js": "^13.6.0",
     "dotenv": "^15.0.0",
+    "hltv-api": "^3.0.0",
     "mongoose": "^6.1.8",
     "parse-duration": "^1.0.2",
-    "util": "^0.12.4",
     "to-zalgo": "^1.0.1",
+    "util": "^0.12.4",
     "wolfram-alpha-api": "https://products.wolframalpha.com/api/libraries/javascript/wolfram-alpha-api-1.0.0-rc.1.tgz"
   }
 }

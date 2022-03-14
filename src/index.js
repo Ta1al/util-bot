@@ -20,4 +20,9 @@ client.on("interactionCreate", (int) => {
 
 client.on("rateLimit", (data) => console.log(`Rate limit exceeded: ${data.path}`, data));
 
+client.on("error", e => console.log('ClientError', e));
+client.on("warn", e => console.log('ClientWarning', e));
+process.on("uncaughtException", e => console.log('UncaughtException', e));
+process.on("unhandledRejection", e => console.log('UnhandledRejection', e));
+
 client.login(TOKEN);

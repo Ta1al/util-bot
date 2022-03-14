@@ -346,6 +346,7 @@ async function monkey(type, params, key) {
   const res = await fetch(url, { headers });
   const data = await res.json();
   if(!data.data) return { message: data.message, data: [{ msg: "no data" }] };
+  if(data.errorId) return { message: data.message, data: [{ msg: data.errorId }] };
   return data;
 }
 

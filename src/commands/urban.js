@@ -64,11 +64,11 @@ module.exports = {
 function createDef(def) {
   const embed = new MessageEmbed()
     .setColor("#2F3136")
-    .setAuthor(def.author)
+    .setAuthor({ name: def.author })
     .setTitle(def.word, def.permalink)
     .setDescription(def.definition.replace(/\[([^\]]+)\]/g, "$1").slice(0, 2048))
     .setTimestamp(def.written_on)
-    .setFooter(`👍 ${def.thumbs_up} 👎 ${def.thumbs_down}`);
+    .setFooter({ text: `👍 ${def.thumbs_up} 👎 ${def.thumbs_down}` });
   if (def.example)
     embed.addField("Example", def.example.replace(/\[([^\]]+)\]/g, "$1").slice(0, 1024));
   return embed;

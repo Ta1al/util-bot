@@ -14,7 +14,7 @@ client.on("interactionCreate", (int) => {
   try {
     require(`./commands/${int.commandName}.js`).run(client, int);
   } catch (e) {
-    int.reply("Command not found.");
+    int.reply("Command not found.", { ephemeral: true });
   }
 });
 

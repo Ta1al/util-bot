@@ -1,12 +1,5 @@
 # Utility Bot
-Contains some random utilities I use
-
-### Command List
-1. `Rawtext`: Context menu command - returns the message with escaped markdown
-2. `Userinfo`: User command - return user info
-3. `Reminder`: Chat Input command - a normal reminder command
-
-4. `Eval`: Chat Input command - with default permissions disabled
+Just random stuff
 
 ### To host the bot
 1. Run `npm i`

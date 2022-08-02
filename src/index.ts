@@ -1,7 +1,9 @@
 import express from 'express';
-import { verifyKeyMiddleware, InteractionType, InteractionResponseType } from 'discord-interactions';
+import { verifyKeyMiddleware, InteractionType } from 'discord-interactions';
 import fs from 'fs';
 import https from 'https';
+import handle from './handler';
+
 const app = express();
 
 const options = {
@@ -18,16 +20,11 @@ app.get('/', express.raw(), (req, res) => {
 });
 // --------------------------------
 
-app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY || ''), (req, res) => {
+app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY || ''), async (req, res) => {
   const message = req.body;
-  console.log(message);
   if (message.type === InteractionType.APPLICATION_COMMAND) {
-    res.send({
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: {
-        content: 'Hello world',
-      },
-    });
+    const response = await handle(message);
+    return res.send(response);
   }
 })
 

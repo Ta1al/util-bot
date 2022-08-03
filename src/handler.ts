@@ -1,11 +1,9 @@
 // Command Handler
-import { InteractionResponseType } from "discord-interactions";
-import { APIChatInputApplicationCommandInteraction } from "discord-api-types/v10";
-async function handle(message: any) {
-  const interaction = message as APIChatInputApplicationCommandInteraction;
+import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType } from "discord-api-types/v10";
+async function handle(interaction: APIChatInputApplicationCommandInteraction): Promise<APIInteractionResponse> {
   const commandName = interaction.data.name;
   return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    type: InteractionResponseType.ChannelMessageWithSource,
     data: {
       content: commandName,
     },

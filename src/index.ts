@@ -1,8 +1,9 @@
 import express from 'express';
-import { verifyKeyMiddleware, InteractionType } from 'discord-interactions';
+import { verifyKeyMiddleware } from 'discord-interactions';
 import fs from 'fs';
 import https from 'https';
 import handle from './handler';
+import { APIChatInputApplicationCommandInteraction, APIInteraction, InteractionType } from 'discord-api-types/v10';
 
 const app = express();
 
@@ -21,9 +22,9 @@ app.get('/', express.raw(), (req, res) => {
 // --------------------------------
 
 app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY || ''), async (req, res) => {
-  const message = req.body;
-  if (message.type === InteractionType.APPLICATION_COMMAND) {
-    const response = await handle(message);
+  const message: APIInteraction = req.body;
+  if (message.type === InteractionType.ApplicationCommand) {
+    const response = await handle(message as APIChatInputApplicationCommandInteraction);
     return res.send(response);
   }
 })

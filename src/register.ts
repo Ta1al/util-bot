@@ -9,7 +9,7 @@ fs.readdirSync(__dirname + '/commands').forEach((file) => {
 });
 
 const url = (id: String | undefined) => `https://discord.com/api/v10/applications/${id}/commands`;
-console.log(JSON.stringify(arr))
+
 fetch(url(id), {
   method: 'PUT',
   body: JSON.stringify(arr),

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node -r dotenv/config .",
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "register": "node -r dotenv/config dist/register"
   },
   "engines": {
     "node": ">=18.3.0",

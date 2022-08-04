@@ -1,12 +1,20 @@
-import { APIChatInputApplicationCommandInteraction, APIChatInputApplicationCommandInteractionData, APIInteractionResponse, ApplicationCommandOptionType, InteractionResponseType, RESTPostAPIChatInputApplicationCommandsJSONBody } from 'discord-api-types/v10';
-import zalgo from 'to-zalgo';
-import unzalgo from 'to-zalgo/banish';
-const commandData: RESTPostAPIChatInputApplicationCommandsJSONBody = {
-  name: 'zalgo',
-  description: 'Zalgo or unzalgo text',
+import {
+  APIApplicationCommandInteractionDataStringOption as StringOption,
+  APIChatInputApplicationCommandInteraction as Interaction,
+  APIInteractionResponse as Response,
+  ApplicationCommandOptionType as OptionType,
+  InteractionResponseType as ResponseType,
+  RESTPostAPIChatInputApplicationCommandsJSONBody as Command
+} from "discord-api-types/v10";
+import zalgo from "to-zalgo";
+import unzalgo from "to-zalgo/banish";
+
+const commandData: Command = {
+  name: "zalgo",
+  description: "Zalgo or unzalgo text",
   options: [
     {
-      type: ApplicationCommandOptionType.String,
+      type: OptionType.String,
       name: "options",
       description: "To zalgo or unzalgo",
       required: true,
@@ -16,7 +24,7 @@ const commandData: RESTPostAPIChatInputApplicationCommandsJSONBody = {
       ]
     },
     {
-      type: ApplicationCommandOptionType.String,
+      type: OptionType.String,
       name: "text",
       description: "Text to convert",
       required: true
@@ -24,18 +32,16 @@ const commandData: RESTPostAPIChatInputApplicationCommandsJSONBody = {
   ]
 };
 
-const exec = async (interaction: APIChatInputApplicationCommandInteraction): Promise<APIInteractionResponse | Error> => {
-  const option = interaction.data.options!.find(({ name }) => name === 'options')!;
-  const txt = interaction.data.options!.find(({ name }) => name === 'text')!;
-  if (option.type !== ApplicationCommandOptionType.String) throw new Error("Invalid option type");
-  if (txt.type !== ApplicationCommandOptionType.String) throw new Error("Invalid text type");
+const exec = async (interaction: Interaction): Promise<Response> => {
+  const option = <StringOption>interaction.data.options!.find(({ name }) => name === "options")!;
+  const txt = <StringOption>interaction.data.options!.find(({ name }) => name === "text")!;
 
   return {
-    type: InteractionResponseType.ChannelMessageWithSource,
+    type: ResponseType.ChannelMessageWithSource,
     data: {
-      content: option.value === "zalgo" ? zalgo(txt.value) : unzalgo(txt.value),
-    },
+      content: option.value === "zalgo" ? zalgo(txt.value) : unzalgo(txt.value)
+    }
   };
-}
+};
 
 export { commandData, exec };

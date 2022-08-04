@@ -8,14 +8,10 @@ fs.readdirSync(__dirname + '/commands').forEach((file) => {
   arr.push(commandData);
 });
 
-const url = (id: String | undefined) => `https://discord.com/api/v10/applications/${id}/commands`;
+const url = `https://discord.com/api/v10/applications/${id}/commands`;
 
-fetch(url(id), {
+fetch(url, {
   method: 'PUT',
   body: JSON.stringify(arr),
   headers: { Authorization: `Bot ${token}`, 'Content-Type': 'application/json' },
 }).then(res => res.json()).then(console.log);
-
-setTimeout(() => {
-  true
-}, 30000);

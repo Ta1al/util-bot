@@ -24,8 +24,7 @@ app.get('/', express.raw(), (req, res) => {
 app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY || ''), async (req, res) => {
   const message: APIInteraction = req.body;
   if (message.type === InteractionType.ApplicationCommand) {
-    const response = await handle(message as APIChatInputApplicationCommandInteraction);
-    return res.send(response);
+    return await handle(message as APIChatInputApplicationCommandInteraction, res);
   }
 })
 

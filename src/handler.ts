@@ -1,22 +1,27 @@
 // Command Handler
-import { APIChatInputApplicationCommandInteraction, APIInteractionResponse, InteractionResponseType } from "discord-api-types/v10";
+import {
+  APIChatInputApplicationCommandInteraction as Interaction,
+  APIInteractionResponse as Response,
+  InteractionResponseType as ResponseType,
+} from "discord-api-types/v10";
 
-async function handle(interaction: APIChatInputApplicationCommandInteraction): Promise<APIInteractionResponse> {
-  let response;
+async function handle(
+  interaction: Interaction,
+  res: any
+): Promise<void> {
   const commandName = interaction.data.name;
   try {
-    response = await require(`./commands/${commandName}`).exec(interaction);
+    await require(`./commands/${commandName}`).exec(interaction, res);
   } catch (error) {
     console.error(error);
-    response = {
-      type: InteractionResponseType.ChannelMessageWithSource,
+    res.send({
+      type: ResponseType.ChannelMessageWithSource,
       data: {
-        content: '⚠️ An error occurred while executing this command!',
-        ephemeral: true,
-      },
-    }
+        content: "⚠️ An error occurred while executing this command!",
+        ephemeral: true
+      }
+    });
   }
-  return response;
 }
 
 export default handle;

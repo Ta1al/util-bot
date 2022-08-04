@@ -32,16 +32,16 @@ const commandData: Command = {
   ]
 };
 
-const exec = async (interaction: Interaction): Promise<Response> => {
+const exec = async (interaction: Interaction, res: any): Promise<void> => {
   const option = <StringOption>interaction.data.options!.find(({ name }) => name === "options")!;
   const txt = <StringOption>interaction.data.options!.find(({ name }) => name === "text")!;
 
-  return {
+  return res.send({
     type: ResponseType.ChannelMessageWithSource,
     data: {
       content: option.value === "zalgo" ? zalgo(txt.value) : unzalgo(txt.value)
     }
-  };
+  });
 };
 
 export { commandData, exec };

@@ -3,12 +3,15 @@ import {
   APIApplicationCommandInteractionDataIntegerOption as IntegerOption,
   APIApplicationCommandInteractionDataBooleanOption as BooleanOption,
   APIChatInputApplicationCommandInteraction as Interaction,
-  APIInteractionResponse as Response,
   ApplicationCommandOptionType as OptionType,
   InteractionResponseType as ResponseType,
   RESTPostAPIChatInputApplicationCommandsJSONBody as Command,
-  MessageFlags
+  MessageFlags,
+  RESTPatchAPIInteractionOriginalResponseFormDataBody as Patch
 } from "discord-api-types/v10";
+import fetch from "node-fetch";
+import util from "util";
+import FormData from "form-data";
 
 const commandData: Command = {
   name: "eval",
@@ -35,25 +38,47 @@ const commandData: Command = {
   dm_permission: false
 };
 
-const exec = async (interaction: Interaction): Promise<Response> => {
-  if(interaction.member?.user.id !== process.env.OWNER_ID) return {
-    type: ResponseType.ChannelMessageWithSource,
-    data: {
-      content: "You are not allowed to use this command",
-      flags: MessageFlags.Ephemeral
-    }
-  }
+const exec = async (interaction: Interaction, res: any): Promise<void> => {
+  if (interaction.member?.user.id !== process.env.OWNER_ID)
+    return res.send({
+      type: ResponseType.ChannelMessageWithSource,
+      data: {
+        content: "You are not allowed to use this command",
+        flags: MessageFlags.Ephemeral
+      }
+    });
 
   const code = <StringOption>interaction.data.options!.find(({ name }) => name === "code")!;
-  const depth = <IntegerOption>interaction.data.options!.find(({ name }) => name === "depth")!;
-  const ephemeral = <BooleanOption>interaction.data.options!.find(({ name }) => name === "ephemeral")!;
+  const depth = <IntegerOption | undefined>interaction.data.options!.find(({ name }) => name === "depth");
+  const ephemeral = <BooleanOption | undefined>interaction.data.options!.find(({ name }) => name === "ephemeral");
 
-  return {
+  await res.send({
     type: ResponseType.DeferredChannelMessageWithSource,
     data: {
-      flags: ephemeral.value ? MessageFlags.Ephemeral : undefined
+      flags: ephemeral && !ephemeral.value ? undefined : MessageFlags.Ephemeral
     }
+  });
+
+    update(interaction, code.value, depth?.value);
+};
+
+async function update(interaction: Interaction, code: string, depth = 0): Promise<void> {
+  let patch: Patch;
+  const url = `https://discord.com/api/v10/webhooks/${interaction.application_id}/${interaction.token}/messages/@original`;
+  const evaled = await eval(code);
+  const result = util.inspect(evaled, { depth });
+  const long = result.length > 1990; // 2000 - 10 (for code block)
+  patch = {
+    content: long ? undefined : `\`\`\`js\n${result}\`\`\``,
+    attachments: long ? [{ id: "0", filename: "output.txt" }] : undefined,
   };
+  const formData = new FormData();
+  formData.append("payload_json", JSON.stringify(patch), { contentType: "application/json" });
+  long ? formData.append("files[0]", Buffer.from(result), { filename: "output.txt" }) : '';
+
+  fetch(url, { method: "PATCH", body: formData })
+    .then((res) => res.json())
+    // .then(console.log);
 }
 
 export { commandData, exec };

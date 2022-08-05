@@ -1,7 +1,6 @@
 import {
   APIApplicationCommandInteractionDataStringOption as StringOption,
   APIChatInputApplicationCommandInteraction as Interaction,
-  APIInteractionResponse as Response,
   ApplicationCommandOptionType as OptionType,
   InteractionResponseType as ResponseType,
   RESTPostAPIChatInputApplicationCommandsJSONBody as Command

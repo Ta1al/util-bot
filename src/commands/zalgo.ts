@@ -1,6 +1,7 @@
 import {
   APIApplicationCommandInteractionDataStringOption as StringOption,
   APIChatInputApplicationCommandInteraction as Interaction,
+  APIInteractionResponseChannelMessageWithSource as Response,
   ApplicationCommandOptionType as OptionType,
   InteractionResponseType as ResponseType,
   RESTPostAPIChatInputApplicationCommandsJSONBody as Command
@@ -35,12 +36,13 @@ const exec = async (interaction: Interaction, res: any): Promise<void> => {
   const option = <StringOption>interaction.data.options!.find(({ name }) => name === "options")!;
   const txt = <StringOption>interaction.data.options!.find(({ name }) => name === "text")!;
 
-  return res.send({
+  const response: Response = {
     type: ResponseType.ChannelMessageWithSource,
     data: {
       content: option.value === "zalgo" ? zalgo(txt.value) : unzalgo(txt.value)
     }
-  });
+  };
+  return res.send(response);
 };
 
 export { commandData, exec };

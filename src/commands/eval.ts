@@ -4,6 +4,7 @@ import {
   APIApplicationCommandInteractionDataBooleanOption as BooleanOption,
   APIChatInputApplicationCommandInteraction as Interaction,
   ApplicationCommandOptionType as OptionType,
+  APIInteractionResponseDeferredChannelMessageWithSource as Response,
   InteractionResponseType as ResponseType,
   RESTPostAPIChatInputApplicationCommandsJSONBody as Command,
   MessageFlags,
@@ -52,14 +53,15 @@ const exec = async (interaction: Interaction, res: any): Promise<void> => {
   const depth = <IntegerOption | undefined>interaction.data.options!.find(({ name }) => name === "depth");
   const ephemeral = <BooleanOption | undefined>interaction.data.options!.find(({ name }) => name === "ephemeral");
 
-  await res.send({
+  const response: Response = {
     type: ResponseType.DeferredChannelMessageWithSource,
     data: {
       flags: ephemeral && !ephemeral.value ? undefined : MessageFlags.Ephemeral
     }
-  });
+  };
+  await res.send(response);
 
-    update(interaction, code.value, depth?.value);
+  update(interaction, code.value, depth?.value);
 };
 
 async function update(interaction: Interaction, code: string, depth = 0): Promise<void> {
@@ -70,15 +72,14 @@ async function update(interaction: Interaction, code: string, depth = 0): Promis
   const long = result.length > 1990; // 2000 - 10 (for code block)
   patch = {
     content: long ? undefined : `\`\`\`js\n${result}\`\`\``,
-    attachments: long ? [{ id: "0", filename: "output.txt" }] : undefined,
+    attachments: long ? [{ id: "0", filename: "output.txt" }] : undefined
   };
   const formData = new FormData();
   formData.append("payload_json", JSON.stringify(patch), { contentType: "application/json" });
-  long ? formData.append("files[0]", Buffer.from(result), { filename: "output.txt" }) : '';
+  long ? formData.append("files[0]", Buffer.from(result), { filename: "output.txt" }) : "";
 
-  fetch(url, { method: "PATCH", body: formData })
-    .then((res) => res.json())
-    // .then(console.log);
+  fetch(url, { method: "PATCH", body: formData }).then((res) => res.json());
+  // .then(console.log);
 }
 
 export { commandData, exec };

@@ -16,7 +16,7 @@ const httpsServer = https.createServer(options, app);
 
 // --------You can remove this-----
 app.use(express.static('public'));
-app.get('/', express.raw(), (_req, res) => {
+app.get('/', (_req, res) => {
   res.redirect('/index.html');
 });
 // --------------------------------

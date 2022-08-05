@@ -1,7 +1,6 @@
 // Command Handler
 import {
   APIChatInputApplicationCommandInteraction as Interaction,
-  APIInteractionResponse as Response,
   InteractionResponseType as ResponseType,
 } from "discord-api-types/v10";
 

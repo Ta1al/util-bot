@@ -78,7 +78,8 @@ async function update(interaction: Interaction, code: string, depth = 0): Promis
   formData.append("payload_json", JSON.stringify(patch), { contentType: "application/json" });
   long ? formData.append("files[0]", Buffer.from(result), { filename: "output.txt" }) : "";
 
-  fetch(url, { method: "PATCH", body: formData }).then((res) => res.json());
+  fetch(url, { method: "PATCH", body: formData });
+  // .then((res) => res.json());
   // .then(console.log);
 }
 

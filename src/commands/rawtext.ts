@@ -3,7 +3,8 @@ import {
   RESTPostAPIContextMenuApplicationCommandsJSONBody as Command,
   APIMessageApplicationCommandInteraction as Interaction,
   APIInteractionResponseChannelMessageWithSource as Response,
-  InteractionResponseType as ResponseType
+  InteractionResponseType as ResponseType,
+  MessageFlags
 } from "discord-api-types/v10";
 import escapeMarkdown from "../util/markdownEscape";
 
@@ -20,6 +21,7 @@ const exec = async (interaction: Interaction, res: any) => {
     type: ResponseType.ChannelMessageWithSource,
     data: {
       content: `**Message Characters:** ${message.content.length}`,
+      flags: MessageFlags.Ephemeral,
       embeds: [
         {
           description: escapeMarkdown(message.content),

@@ -1,13 +1,10 @@
 // Command Handler
 import {
   APIChatInputApplicationCommandInteraction as Interaction,
-  InteractionResponseType as ResponseType,
+  InteractionResponseType as ResponseType
 } from "discord-api-types/v10";
 
-async function handle(
-  interaction: Interaction,
-  res: any
-): Promise<void> {
+async function handle(interaction: Interaction, res: any): Promise<void> {
   const commandName = interaction.data.name;
   try {
     await require(`./commands/${commandName}`).exec(interaction, res);

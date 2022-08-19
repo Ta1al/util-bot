@@ -2,7 +2,6 @@ import {
   ApplicationCommandType as CommandType,
   RESTPostAPIContextMenuApplicationCommandsJSONBody as Command,
   APIMessageApplicationCommandInteraction as Interaction,
-  APIInteractionResponseChannelMessageWithSource as Response,
   InteractionResponseType as ResponseType,
   MessageFlags
 } from "discord-api-types/v10";
@@ -17,7 +16,13 @@ const exec = async (interaction: Interaction, res: any) => {
   const data = interaction.data;
   const message = data.resolved.messages[data.target_id]!;
 
-  const response: Response = {
+  if (!message.content.length)
+    return res.json({
+      type: ResponseType.ChannelMessageWithSource,
+      data: { content: "⚠ Message has no content", flags: MessageFlags.Ephemeral }
+    });
+
+  res.send({
     type: ResponseType.ChannelMessageWithSource,
     data: {
       content: `**Message Characters:** ${message.content.length}`,
@@ -29,8 +34,7 @@ const exec = async (interaction: Interaction, res: any) => {
         }
       ]
     }
-  };
-  res.send(response);
+  });
 };
 
 export { commandData, exec };

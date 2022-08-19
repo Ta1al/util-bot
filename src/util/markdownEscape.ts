@@ -21,7 +21,7 @@
  * @param {EscapeMarkdownOptions} [options={}] Options for escaping the markdown
  * @returns {string}
  */
- function escapeMarkdown(
+function escapeMarkdown(
   text: string,
   {
     codeBlock = true,
@@ -33,12 +33,12 @@
     spoiler = true,
     codeBlockContent = true,
     inlineCodeContent = true,
-    quote = true,
-  } = {},
+    quote = true
+  } = {}
 ): string {
   if (!codeBlockContent) {
     return text
-      .split('```')
+      .split("```")
       .map((subString, index, array) => {
         if (index % 2 && index !== array.length - 1) return subString;
         return escapeMarkdown(subString, {
@@ -48,10 +48,10 @@
           underline,
           strikethrough,
           spoiler,
-          inlineCodeContent,
+          inlineCodeContent
         });
       })
-      .join(codeBlock ? '\\`\\`\\`' : '```');
+      .join(codeBlock ? "\\`\\`\\`" : "```");
   }
   if (!inlineCodeContent) {
     return text
@@ -64,10 +64,10 @@
           italic,
           underline,
           strikethrough,
-          spoiler,
+          spoiler
         });
       })
-      .join(inlineCode ? '\\`' : '`');
+      .join(inlineCode ? "\\`" : "`");
   }
   if (inlineCode) text = escapeInlineCode(text);
   if (codeBlock) text = escapeCodeBlock(text);
@@ -86,7 +86,7 @@
  * @returns {string}
  */
 function escapeCodeBlock(text: string): string {
-  return text.replace(/```/g, '\\`\\`\\`');
+  return text.replace(/```/g, "\\`\\`\\`");
 }
 
 /**
@@ -95,7 +95,7 @@ function escapeCodeBlock(text: string): string {
  * @returns {string}
  */
 function escapeInlineCode(text: string): string {
-  return text.replace(/(?<=^|[^`])``?(?=[^`]|$)/g, match => (match.length === 2 ? '\\`\\`' : '\\`'));
+  return text.replace(/(?<=^|[^`])``?(?=[^`]|$)/g, match => (match.length === 2 ? "\\`\\`" : "\\`"));
 }
 
 /**
@@ -106,12 +106,12 @@ function escapeInlineCode(text: string): string {
 function escapeItalic(text: string): string {
   let i = 0;
   text = text.replace(/(?<=^|[^*])\*([^*]|\*\*|$)/g, (_, match) => {
-    if (match === '**') return ++i % 2 ? `\\*${match}` : `${match}\\*`;
+    if (match === "**") return ++i % 2 ? `\\*${match}` : `${match}\\*`;
     return `\\*${match}`;
   });
   i = 0;
   return text.replace(/(?<=^|[^_])_([^_]|__|$)/g, (_, match) => {
-    if (match === '__') return ++i % 2 ? `\\_${match}` : `${match}\\_`;
+    if (match === "__") return ++i % 2 ? `\\_${match}` : `${match}\\_`;
     return `\\_${match}`;
   });
 }
@@ -125,7 +125,7 @@ function escapeBold(text: string): string {
   let i = 0;
   return text.replace(/\*\*(\*)?/g, (_, match) => {
     if (match) return ++i % 2 ? `${match}\\*\\*` : `\\*\\*${match}`;
-    return '\\*\\*';
+    return "\\*\\*";
   });
 }
 
@@ -138,7 +138,7 @@ function escapeUnderline(text: string): string {
   let i = 0;
   return text.replace(/__(_)?/g, (_, match) => {
     if (match) return ++i % 2 ? `${match}\\_\\_` : `\\_\\_${match}`;
-    return '\\_\\_';
+    return "\\_\\_";
   });
 }
 
@@ -148,7 +148,7 @@ function escapeUnderline(text: string): string {
  * @returns {string}
  */
 function escapeStrikethrough(text: string): string {
-  return text.replace(/~~/g, '\\~\\~');
+  return text.replace(/~~/g, "\\~\\~");
 }
 
 /**
@@ -157,12 +157,11 @@ function escapeStrikethrough(text: string): string {
  * @returns {string}
  */
 function escapeSpoiler(text: string): string {
-  return text.replace(/\|\|/g, '\\|\\|');
+  return text.replace(/\|\|/g, "\\|\\|");
 }
-
-
-export default escapeMarkdown;
 
 function escapeQuote(text: string): string {
-  return text.replace(/\>/g, '\\>');
+  return text.replace(/\>/g, "\\>");
 }
+
+export default escapeMarkdown;

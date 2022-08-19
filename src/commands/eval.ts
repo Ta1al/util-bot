@@ -8,7 +8,9 @@ import {
   InteractionResponseType as ResponseType,
   RESTPostAPIChatInputApplicationCommandsJSONBody as Command,
   MessageFlags,
-  RESTPatchAPIInteractionOriginalResponseFormDataBody as Patch
+  RESTPatchAPIInteractionOriginalResponseFormDataBody as Patch,
+  RouteBases,
+  Routes
 } from "discord-api-types/v10";
 import fetch from "node-fetch";
 import util from "util";
@@ -66,10 +68,10 @@ const exec = async (interaction: Interaction, res: any): Promise<void> => {
 
 async function update(interaction: Interaction, code: string, depth = 0): Promise<void> {
   let patch: Patch;
-  const url = `https://discord.com/api/v10/webhooks/${interaction.application_id}/${interaction.token}/messages/@original`;
+  const url = `${RouteBases.api}${Routes.webhookMessage(interaction.application_id, interaction.token)}`;
   const evaled = await eval(code);
   const result = util.inspect(evaled, { depth });
-  const long = result.length > 1990; // 2000 - 10 (for code block)
+  const long = result.length > 1990; // 2000 - 10 (for code block) 
   patch = {
     content: long ? undefined : `\`\`\`js\n${result}\`\`\``,
     attachments: long ? [{ id: "0", filename: "output.txt" }] : undefined

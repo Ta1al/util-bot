@@ -6,7 +6,7 @@ import {
   InteractionResponseType as ResponseType,
   MessageFlags
 } from "discord-api-types/v10";
-import escapeMarkdown from "../util/markdownEscape";
+import { escapeMarkdown } from "../util/index";
 
 const commandData: Command = {
   type: CommandType.Message,

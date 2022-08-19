@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 import { verifyKeyMiddleware } from "discord-interactions";
 import fs from "fs";
@@ -19,8 +20,8 @@ const emitter = new event.EventEmitter();
 const app = express();
 
 const options = {
-  cert: fs.readFileSync(process.env.CERT_PATH || "./cert.pem"),
-  key: fs.readFileSync(process.env.KEY_PATH || "./key.pem")
+  cert: fs.readFileSync(process.env.CERT_PATH!),
+  key: fs.readFileSync(process.env.KEY_PATH!)
 };
 
 const httpsServer = https.createServer(options, app);
@@ -32,7 +33,7 @@ app.get("/", (_req, res) => {
 });
 // --------------------------------
 
-app.post("/interactions", verifyKeyMiddleware(process.env.PUBLIC_KEY || ""), async (req, res) => {
+app.post("/interactions", verifyKeyMiddleware(process.env.PUBLIC_KEY!), async (req, res) => {
   const message: Interaction | ComponentInteraction = req.body;
   if (isMessageComponentInteraction(message)) return emitter.emit(message.message.interaction!.id, message, res);
   if (isChatInputApplicationCommandInteraction(message) || isContextMenuApplicationCommandInteraction(message)) {

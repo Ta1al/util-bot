@@ -1,6 +1,8 @@
+import "dotenv/config";
+import { RouteBases, Routes } from 'discord-api-types/v10';
 import fs from 'fs';
 import fetch from 'node-fetch';
-const id = process.env.APPLICATION_ID, token = process.env.TOKEN;
+const id = process.env.APPLICATION_ID!, token = process.env.TOKEN;
 const arr: any[] = [];
 
 fs.readdirSync(__dirname + '/commands').forEach((file) => {
@@ -8,7 +10,7 @@ fs.readdirSync(__dirname + '/commands').forEach((file) => {
   arr.push(commandData);
 });
 
-const url = `https://discord.com/api/v10/applications/${id}/commands`;
+const url = `${RouteBases.api}${Routes.applicationCommands(id)}`;
 
 fetch(url, {
   method: 'PUT',

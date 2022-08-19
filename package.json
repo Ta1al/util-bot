@@ -4,10 +4,10 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node -r dotenv/config .",
+    "start": "node .",
     "build": "tsc",
     "watch": "tsc -w",
-    "register": "node -r dotenv/config dist/register"
+    "register": "node dist/register"
   },
   "engines": {
     "node": ">=18.3.0",

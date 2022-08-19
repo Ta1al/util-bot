@@ -7,9 +7,13 @@ import event from "events";
 import {
   APIApplicationCommandInteraction as Interaction,
   APIChatInputApplicationCommandInteraction as ChatCommand,
-  APIMessageComponentInteraction as ComponentInteraction,
+  APIMessageComponentInteraction as ComponentInteraction
 } from "discord-api-types/v10";
-import { isChatInputApplicationCommandInteraction, isMessageComponentInteraction } from "discord-api-types/utils/v10";
+import {
+  isChatInputApplicationCommandInteraction,
+  isContextMenuApplicationCommandInteraction,
+  isMessageComponentInteraction
+} from "discord-api-types/utils/v10";
 
 const emitter = new event.EventEmitter();
 const app = express();
@@ -31,7 +35,7 @@ app.get("/", (_req, res) => {
 app.post("/interactions", verifyKeyMiddleware(process.env.PUBLIC_KEY || ""), async (req, res) => {
   const message: Interaction | ComponentInteraction = req.body;
   if (isMessageComponentInteraction(message)) return emitter.emit(message.message.interaction!.id, message, res);
-  if (isChatInputApplicationCommandInteraction(message)) {
+  if (isChatInputApplicationCommandInteraction(message) || isContextMenuApplicationCommandInteraction(message)) {
     return await handle(message as ChatCommand, res);
   }
 });

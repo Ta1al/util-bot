@@ -6,6 +6,7 @@ import {
 } from "discord-api-types/v10";
 import fetch from "node-fetch";
 import escapeMarkdown from "./markdownEscape";
+import emitter from './emitter';
 
 async function respond(res: any, body: Response) {
   return await res.send(body);
@@ -27,4 +28,4 @@ async function updateMessage(
     .catch(e => e);
 }
 
-export { respond, updateMessage, escapeMarkdown };
+export { respond, updateMessage, escapeMarkdown, emitter };

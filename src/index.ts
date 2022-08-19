@@ -4,7 +4,7 @@ import { verifyKeyMiddleware } from "discord-interactions";
 import fs from "fs";
 import https from "https";
 import handle from "./handler";
-import event from "events";
+import { emitter } from "./util/index";
 import {
   APIApplicationCommandInteraction as Interaction,
   APIChatInputApplicationCommandInteraction as ChatCommand,
@@ -16,7 +16,6 @@ import {
   isMessageComponentInteraction
 } from "discord-api-types/utils/v10";
 
-const emitter = new event.EventEmitter();
 const app = express();
 
 const options = {
@@ -46,5 +45,3 @@ app.post("/interactions", verifyKeyMiddleware(process.env.PUBLIC_KEY!), async (r
 httpsServer.listen(443, () => {
   console.log("Server started!");
 });
-
-export default emitter;

@@ -6,7 +6,7 @@ import {
   APIMessageComponentSelectMenuInteraction as SelectMenuInteraction
 } from "discord-api-types/v10";
 import ud from "urban-dictionary";
-import emitter from "../index";
+import { emitter } from "../util/index";
 import { respond, updateMessage } from "../util/index";
 
 const commandData: Command = {

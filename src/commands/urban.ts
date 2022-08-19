@@ -1,14 +1,13 @@
 import {
   APIChatInputApplicationCommandInteraction as Interaction,
   RESTPostAPIChatInputApplicationCommandsJSONBody as Command,
-  RESTPatchAPIInteractionOriginalResponseJSONBody as Patch,
   InteractionResponseType as ResponseType,
   APIApplicationCommandInteractionDataStringOption as StringOption,
   APIMessageComponentSelectMenuInteraction as SelectMenuInteraction
 } from "discord-api-types/v10";
-import fetch from "node-fetch";
 import ud from "urban-dictionary";
 import emitter from "../index";
+import { updateMessage } from "../util/index";
 
 const commandData: Command = {
   name: "urban",
@@ -30,10 +29,14 @@ const exec = async (interaction: Interaction, res: any) => {
 
   try {
     const definitions = await ud.define(term);
-    update(interaction, {
-      components: [makeSelectMenu(definitions)],
-      embeds: [makeEmbed(definitions[0])]
-    });
+    updateMessage(
+      {
+        components: [makeSelectMenu(definitions)],
+        embeds: [makeEmbed(definitions[0])]
+      },
+      interaction.application_id,
+      interaction.token
+    );
 
     const callback = (select: SelectMenuInteraction, selectRes: any) =>
       handleSelection(select, selectRes, interaction, definitions);
@@ -41,7 +44,7 @@ const exec = async (interaction: Interaction, res: any) => {
     emitter.on(interaction.id, callback);
     setTimeout(() => emitter.removeListener(interaction.id, callback), 60000);
   } catch (error) {
-    update(interaction, { content: `⚠ Definition not found!` });
+    updateMessage({ content: `⚠ Definition not found!` }, interaction.application_id, interaction.token);
   }
 };
 
@@ -100,11 +103,6 @@ function makeEmbed(def: ud.DefinitionObject) {
       }
     ]
   };
-}
-
-function update(interaction: Interaction, patch: Patch) {
-  const url = `https://discord.com/api/v10/webhooks/${interaction.application_id}/${interaction.token}/messages/@original`;
-  fetch(url, { method: "PATCH", body: JSON.stringify(patch), headers: { "Content-Type": "application/json" } });
 }
 
 export { commandData, exec };

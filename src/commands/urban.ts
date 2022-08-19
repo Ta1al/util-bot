@@ -58,7 +58,7 @@ async function handleSelection(
   if (select.user?.id !== interaction.user?.id) return;
 
   const value = parseInt(select.data.values[0]);
-  return await res.send({
+  return await respond(res, {
     type: ResponseType.UpdateMessage,
     data: {
       components: [makeSelectMenu(definitions, value)],

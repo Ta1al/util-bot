@@ -4,7 +4,6 @@ import {
   APIApplicationCommandInteractionDataBooleanOption as BooleanOption,
   APIChatInputApplicationCommandInteraction as Interaction,
   ApplicationCommandOptionType as OptionType,
-  APIInteractionResponseDeferredChannelMessageWithSource as Response,
   InteractionResponseType as ResponseType,
   RESTPostAPIChatInputApplicationCommandsJSONBody as Command,
   MessageFlags,
@@ -15,6 +14,7 @@ import {
 import fetch from "node-fetch";
 import util from "util";
 import FormData from "form-data";
+import { respond } from "../util";
 
 const commandData: Command = {
   name: "eval",
@@ -43,7 +43,7 @@ const commandData: Command = {
 
 const exec = async (interaction: Interaction, res: any): Promise<void> => {
   if (interaction.member?.user.id !== process.env.OWNER_ID)
-    return res.send({
+    return respond(res, {
       type: ResponseType.ChannelMessageWithSource,
       data: {
         content: "You are not allowed to use this command",
@@ -55,23 +55,22 @@ const exec = async (interaction: Interaction, res: any): Promise<void> => {
   const depth = <IntegerOption | undefined>interaction.data.options!.find(({ name }) => name === "depth");
   const ephemeral = <BooleanOption | undefined>interaction.data.options!.find(({ name }) => name === "ephemeral");
 
-  const response: Response = {
+  await respond(res, {
     type: ResponseType.DeferredChannelMessageWithSource,
     data: {
       flags: ephemeral && !ephemeral.value ? undefined : MessageFlags.Ephemeral
     }
-  };
-  await res.send(response);
-
-  update(interaction, code.value, depth?.value);
+  });
+  const evaled = await eval(code.value);
+  const result = util.inspect(evaled, { depth: depth?.value ?? 0 });
+  update(interaction, result);
 };
 
-async function update(interaction: Interaction, code: string, depth = 0): Promise<void> {
+async function update(interaction: Interaction, result: string): Promise<void> {
   let patch: Patch;
   const url = `${RouteBases.api}${Routes.webhookMessage(interaction.application_id, interaction.token)}`;
-  const evaled = await eval(code);
-  const result = util.inspect(evaled, { depth });
-  const long = result.length > 1990; // 2000 - 10 (for code block) 
+
+  const long = result.length > 1990; // 2000 - 10 (for code block)
   patch = {
     content: long ? undefined : `\`\`\`js\n${result}\`\`\``,
     attachments: long ? [{ id: "0", filename: "output.txt" }] : undefined

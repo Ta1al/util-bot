@@ -1,13 +1,13 @@
 import {
   APIApplicationCommandInteractionDataStringOption as StringOption,
   APIChatInputApplicationCommandInteraction as Interaction,
-  APIInteractionResponseChannelMessageWithSource as Response,
   ApplicationCommandOptionType as OptionType,
   InteractionResponseType as ResponseType,
   RESTPostAPIChatInputApplicationCommandsJSONBody as Command
 } from "discord-api-types/v10";
 import zalgo from "to-zalgo";
 import unzalgo from "to-zalgo/banish";
+import { respond } from "../util";
 
 const commandData: Command = {
   name: "zalgo",
@@ -32,17 +32,16 @@ const commandData: Command = {
   ]
 };
 
-const exec = async (interaction: Interaction, res: any): Promise<void> => {
+const exec = async (interaction: Interaction, res: any) => {
   const option = <StringOption>interaction.data.options!.find(({ name }) => name === "options")!;
   const txt = <StringOption>interaction.data.options!.find(({ name }) => name === "text")!;
 
-  const response: Response = {
+  respond(res, {
     type: ResponseType.ChannelMessageWithSource,
     data: {
       content: option.value === "zalgo" ? zalgo(txt.value) : unzalgo(txt.value)
     }
-  };
-  return res.send(response);
+  });
 };
 
 export { commandData, exec };

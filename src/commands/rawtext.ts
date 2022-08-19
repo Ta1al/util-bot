@@ -5,7 +5,7 @@ import {
   InteractionResponseType as ResponseType,
   MessageFlags
 } from "discord-api-types/v10";
-import { escapeMarkdown } from "../util/index";
+import { escapeMarkdown, respond } from "../util/index";
 
 const commandData: Command = {
   type: CommandType.Message,
@@ -22,7 +22,7 @@ const exec = async (interaction: Interaction, res: any) => {
       data: { content: "⚠ Message has no content", flags: MessageFlags.Ephemeral }
     });
 
-  res.send({
+  respond(res, {
     type: ResponseType.ChannelMessageWithSource,
     data: {
       content: `**Message Characters:** ${message.content.length}`,

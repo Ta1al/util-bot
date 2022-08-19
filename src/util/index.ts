@@ -1,8 +1,22 @@
-import { RouteBases, Routes, RESTPatchAPIInteractionOriginalResponseJSONBody as Patch } from "discord-api-types/v10";
+import {
+  RouteBases,
+  Routes,
+  RESTPatchAPIInteractionOriginalResponseJSONBody as Patch,
+  APIInteractionResponse as Response
+} from "discord-api-types/v10";
 import fetch from "node-fetch";
-import escapeMarkdown from './markdownEscape';
+import escapeMarkdown from "./markdownEscape";
 
-async function updateMessage(body: Patch, applicationId: string, token: string, messageId: string | undefined = undefined): Promise<any> {
+async function respond(res: any, body: Response) {
+  return await res.send(body);
+}
+
+async function updateMessage(
+  body: Patch,
+  applicationId: string,
+  token: string,
+  messageId: string | undefined = undefined
+): Promise<any> {
   const url = `${RouteBases.api}${Routes.webhookMessage(applicationId, token, messageId)}`;
   return fetch(url, {
     method: "PATCH",
@@ -13,4 +27,4 @@ async function updateMessage(body: Patch, applicationId: string, token: string, 
     .catch(e => e);
 }
 
-export { updateMessage, escapeMarkdown };
+export { respond, updateMessage, escapeMarkdown };

@@ -1,7 +1,10 @@
 import {
   RESTPostAPIChatInputApplicationCommandsJSONBody as Command,
-  ApplicationCommandOptionType as OptionType
+  ApplicationCommandOptionType as OptionType,
+  APIChatInputApplicationCommandInteraction as Interaction,
+  InteractionResponseType as ResponseType
 } from "discord-api-types/v10";
+import { respond } from "../util";
 
 const commandData: Command = {
   name: "random",
@@ -51,4 +54,9 @@ const commandData: Command = {
   ]
 };
 
-export { commandData };
+const exec = async (interaction: Interaction, res: any) => {
+  await respond(res, { type: ResponseType.DeferredChannelMessageWithSource });
+  console.log(interaction);
+};
+
+export { commandData, exec };

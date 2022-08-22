@@ -2,9 +2,12 @@ import {
   RESTPostAPIChatInputApplicationCommandsJSONBody as Command,
   ApplicationCommandOptionType as OptionType,
   APIChatInputApplicationCommandInteraction as Interaction,
-  InteractionResponseType as ResponseType
+  InteractionResponseType as ResponseType,
+  APIApplicationCommandInteractionDataIntegerOption as IntegerOption,
+  APIApplicationCommandSubcommandOption as SubcommandOption
 } from "discord-api-types/v10";
-import { respond } from "../util";
+import fetch from "node-fetch";
+import { respond, updateMessage } from "../util";
 
 const commandData: Command = {
   name: "random",
@@ -56,7 +59,28 @@ const commandData: Command = {
 
 const exec = async (interaction: Interaction, res: any) => {
   await respond(res, { type: ResponseType.DeferredChannelMessageWithSource });
-  console.log(interaction);
+  const type = interaction.data.options![0].name;
+
+  if (type === "coinflip") {
+    const number = parseInt(await generateRandom(1, 0, 100, 10));
+    const result = number % 2 === 0 ? "heads" : "tails";
+    await updateMessage({ content: result }, interaction.application_id, interaction.token);
+  } else if (type === "numbers") {
+    const { options } = <SubcommandOption>interaction.data.options![0];
+    const { value: num } = <IntegerOption>(<unknown>options![0]);
+    const { value: min } = <IntegerOption>(<unknown>options![1]);
+    const { value: max } = <IntegerOption>(<unknown>options![2]);
+    const { value: base } = <IntegerOption>(<unknown>options![3]) || { value: 10 };
+
+    const numbers = await generateRandom(num, min, max, base);
+    updateMessage({ content: numbers.split("\n").join("\t").slice(0, 2000) }, interaction.application_id, interaction.token);
+  }
 };
 
 export { commandData, exec };
+
+async function generateRandom(num: number, min: number, max: number, base: number) {
+  return await fetch(
+    `https://www.random.org/integers/?num=${num}&min=${min}&max=${max}&col=1&base=${base}&format=plain&rnd=new`
+  ).then(res => res.text());
+}

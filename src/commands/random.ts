@@ -73,7 +73,11 @@ const exec = async (interaction: Interaction, res: any) => {
     const { value: base } = <IntegerOption>(<unknown>options![3]) || { value: 10 };
 
     const numbers = await generateRandom(num, min, max, base);
-    updateMessage({ content: numbers.split("\n").join("\t").slice(0, 2000) }, interaction.application_id, interaction.token);
+    updateMessage(
+      { content: numbers.split("\n").join("\t").slice(0, 2000) },
+      interaction.application_id,
+      interaction.token
+    );
   }
 };
 

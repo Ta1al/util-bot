@@ -64,7 +64,7 @@ const exec = async (interaction: Interaction, res: any) => {
   if (type === "coinflip") {
     const number = parseInt(await generateRandom(1, 0, 100, 10));
     const result = number % 2 === 0 ? "heads" : "tails";
-    await updateMessage({ content: result }, interaction.application_id, interaction.token);
+    updateMessage({ content: result }, interaction.application_id, interaction.token);
   } else if (type === "numbers") {
     const { options } = <SubcommandOption>interaction.data.options![0];
     const { value: num } = <IntegerOption>(<unknown>options![0]);

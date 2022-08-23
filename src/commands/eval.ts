@@ -60,7 +60,12 @@ const exec = async (interaction: Interaction, res: any): Promise<void> => {
       flags: ephemeral && !ephemeral.value ? undefined : MessageFlags.Ephemeral
     }
   });
-  const evaled = await eval(code.value);
+  let evaled;
+  try {
+    evaled = await eval(code.value);
+  } catch (error) {
+    evaled = error;
+  }
   const result = util.inspect(evaled, { depth: depth?.value ?? 0 });
   result.length > 1990
     ? updateMessageWithAttachment(

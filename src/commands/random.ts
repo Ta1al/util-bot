@@ -7,7 +7,7 @@ import {
   APIApplicationCommandSubcommandOption as SubcommandOption
 } from "discord-api-types/v10";
 import fetch from "node-fetch";
-import { respond, updateMessage } from "../util";
+import { respond, updateMessage, updateMessageWithAttachment } from "../util";
 
 const commandData: Command = {
   name: "random",
@@ -73,11 +73,15 @@ const exec = async (interaction: Interaction, res: any) => {
     const { value: base } = <IntegerOption>(<unknown>options![3]) || { value: 10 };
 
     const numbers = await generateRandom(num, min, max, base);
-    updateMessage(
-      { content: numbers.split("\n").join("\t").slice(0, 2000) },
-      interaction.application_id,
-      interaction.token
-    );
+    const res = numbers.split("\n").join("\t");
+    res.length > 2000
+      ? updateMessageWithAttachment(
+          { content: "The numbers are too long to send in a message, so here's a file instead:" },
+          interaction.application_id,
+          interaction.token,
+          [{ name: "numbers.txt", file: Buffer.from(res) }]
+        )
+      : updateMessage({ content: res }, interaction.application_id, interaction.token);
   }
 };
 

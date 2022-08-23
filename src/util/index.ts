@@ -51,4 +51,4 @@ async function updateMessageWithAttachment(
     .catch(e => e);
 }
 
-export { respond, updateMessage, escapeMarkdown, emitter, updateMessageWithAttachment };
+export { respond, updateMessage, updateMessageWithAttachment, escapeMarkdown, emitter };

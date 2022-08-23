@@ -9,7 +9,7 @@ import {
   MessageFlags
 } from "discord-api-types/v10";
 import util from "util";
-import { respond, updateMessageWithAttachment } from "../util";
+import { respond, updateMessage, updateMessageWithAttachment } from "../util";
 
 const commandData: Command = {
   name: "eval",
@@ -62,12 +62,18 @@ const exec = async (interaction: Interaction, res: any): Promise<void> => {
   });
   const evaled = await eval(code.value);
   const result = util.inspect(evaled, { depth: depth?.value ?? 0 });
-  updateMessageWithAttachment(
-    { content: `\`\`\`js\n${result}\`\`\`` },
-    interaction.application_id,
-    interaction.token,
-    [{ name: "output.txt", file: Buffer.from(result) }]
-  );
+  result.length > 1990
+    ? updateMessageWithAttachment(
+        { content: `Output:` },
+        interaction.application_id,
+        interaction.token,
+        [{ name: "output.txt", file: Buffer.from(result) }]
+      )
+    : updateMessage(
+        { content: `\`\`\`js\n${result}\n\`\`\`` },
+        interaction.application_id,
+        interaction.token
+      );
 };
 
 export { commandData, exec };

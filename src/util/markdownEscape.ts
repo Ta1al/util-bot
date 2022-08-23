@@ -95,7 +95,9 @@ function escapeCodeBlock(text: string): string {
  * @returns {string}
  */
 function escapeInlineCode(text: string): string {
-  return text.replace(/(?<=^|[^`])``?(?=[^`]|$)/g, match => (match.length === 2 ? "\\`\\`" : "\\`"));
+  return text.replace(/(?<=^|[^`])``?(?=[^`]|$)/g, match =>
+    match.length === 2 ? "\\`\\`" : "\\`"
+  );
 }
 
 /**

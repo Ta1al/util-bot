@@ -44,7 +44,11 @@ const exec = async (interaction: Interaction, res: any) => {
     emitter.on(interaction.id, callback);
     setTimeout(() => emitter.removeListener(interaction.id, callback), 60000);
   } catch (error) {
-    updateMessage({ content: `⚠ Definition not found!` }, interaction.application_id, interaction.token);
+    updateMessage(
+      { content: `⚠ Definition not found!` },
+      interaction.application_id,
+      interaction.token
+    );
   }
 };
 

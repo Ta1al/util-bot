@@ -70,5 +70,4 @@ const exec = async (interaction: Interaction, res: any): Promise<void> => {
   );
 };
 
-
 export { commandData, exec };

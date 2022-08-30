@@ -1,5 +1,5 @@
 # WORK IN PROGRESS
-
+Invite [here](https://canary.discord.com/api/oauth2/authorize?client_id=1004338047917240340&scope=applications.commands)
 ## To Start
 #### 1. Clone
 ```

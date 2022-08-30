@@ -10,14 +10,13 @@
     "register": "node dist/register"
   },
   "engines": {
-    "node": ">=18.3.0",
-    "npm": ">=8.12.1",
+    "node": ">=16.16.0",
+    "npm": ">=8.11.0",
     "typescript": ">=4.5.4"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/express": "^4.17.13",
     "discord-api-types": "^0.37.0",
     "discord-interactions": "^3.2.0",
     "dotenv": "^16.0.1",
@@ -32,6 +31,7 @@
   },
   "devDependencies": {
     "@types/node-fetch": "^2.6.2",
+    "@types/express": "^4.17.13",
     "@types/urban-dictionary": "^3.0.0"
   }
 }

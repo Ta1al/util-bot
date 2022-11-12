@@ -20,7 +20,7 @@ router.post("/", async function (request: Request, _env: Env): Promise<Interacti
   }
   return new InteractionResponse({
     type: InteractionResponseType.ChannelMessageWithSource,
-    data: { content: "Not yet implemented!" }
+    data: { content: "❌ Not yet implemented!" }
   });
 });
 
